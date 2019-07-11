@@ -5,20 +5,20 @@
 
 <script src="js/d3.v4.min.js" charset="utf-8"></script>
 <script src="js/dagre-d3.js"></script>
-
-<!-- Pull in JQuery dependencies -->
-<!---<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.css"> -->
-
-<link rel="stylesheet" href="css/jquery.qtip.min.css">
-<script src="js/jquery-1.9.1.min.js"></script>
+<script   src="https://code.jquery.com/jquery-3.4.1.min.js"   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="   crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!--<script src="js/jquery-1.9.1.min.js"></script>
 <!---<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.css"> -->
 <script src="js/jquery.qtip.min.js"></script>
-<!---<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.3/jquery.tipsy.js"></script>-->
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="css/jquery.qtip.min.css">
 
 <style id="css">
-body {
+/*body {
   font: 300 14px 'Helvetica Neue', Helvetica;
-}
+}*/
 
 .clusters rect {
   fill: #ffffff;
@@ -61,47 +61,53 @@ body {
 
 <h1>Visualizing Poetic Meter in South Asian Languages</h1>
 
-<script src="js/wavesurfer.js">/*https://unpkg.com*/</script>
+<script src="js/wavesurfer.js"></script>
 <script src="js/wavesurfer.cursor.js"></script>
 <svg width=960 height=600><g/></svg>
 <div id="waveform"></div>
-<div class="controls">
-  <button class="btn btn-primary" onclick="wavesurfer.skipBackward()">
-    <i class="fa fa-step-backward"></i>
-    Backward
-  </button>
 
-  <button class="btn btn-primary" onclick="wavesurfer.playPause()">
-    <i class="fa fa-play"></i>
-    Play
-    /
-    <i class="fa fa-pause"></i>
-    Pause
-  </button>
-
-  <button class="btn btn-primary" onclick="wavesurfer.skipForward()">
-    <i class="fa fa-step-forward"></i>
-    Forward
-  </button>
-
-  <button class="btn btn-primary" onclick="wavesurfer.toggleMute()">
-    <i class="fa fa-volume-off"></i>
-    Toggle Mute
-  </button>
+<div class="form-group" id="language">
+    <button class="btn btn-primary" onclick="wavesurfer.playPause()">
+      Play / Pause
+    </button>
+    <div class="btn-group btn-group-toggle" id="language-group" data-toggle="buttons">
+  <label class="btn btn-secondary active">
+    <input type="radio" name="options" id="en" autocomplete="off" checked> English
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="ur" autocomplete="off"> اردو
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="hi" autocomplete="off"> हिन्दी
+  </label>
+</div>
 </div>
 
 
+
+    <!--<button class="btn btn-primary" onclick="wavesurfer.toggleMute()">
+      <i class="fa fa-volume-off"></i>
+      Toggle Mute
+    </button>-->
+
+<div id="poem_text"></div>
 <section>
 <p>An example that shows a graph-based scan of an Urdu-Hindi poem ("Bol" by Faiz Ahmed Faiz)  with hover events explaining the meter. Rectangles are long metrical units, circles are short ones.
 </section>
+
+<script src="settings.js"></script>
 
 <script id="js">
 // Create a new directed graph
 
 var base_graph = {"edge": {"0": {"1": {}}, "1": {"2": {}, "3": {}}, "2": {"4": {}}, "3": {"5": {}}, "4": {"6": {}}, "5": {"4": {}}, "6": {"7": {}}, "7": {"8": {}, "9": {}}, "8": {"10": {}}, "9": {"11": {}}, "10": {"12": {}}, "11": {"10": {}}, "12": {"13": {}}}, "node": {"0": {"type": "0"}, "1": {"type": "="}, "2": {"type": "="}, "3": {"type": "-"}, "4": {"type": "="}, "5": {"type": "-"}, "6": {"type": "="}, "7": {"type": "="}, "8": {"type": "="}, "9": {"type": "-"}, "10": {"type": "="}, "11": {"type": "-"}, "12": {"type": "="}, "13": {"type": "Accepting", "id": 0, "name": "Faiz", "regex_pattern": "=(=|--)===(=|--)==", "meter_key": 0}}, "edge_list": [[0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [4, 6], [5, 4], [6, 7], [7, 8], [7, 9], [8, 10], [9, 11], [10, 12], [11, 10], [12, 13]]};
 
+
 function dagred3_base_graph(active) {
-  var g = new dagreD3.graphlib.Graph({compound:false}).setGraph({'rankdir':"lr"})
+  if (language=='ur') {
+    rankdir = 'rl'
+  } else {rankdir='lr'}
+  var g = new dagreD3.graphlib.Graph({compound:false}).setGraph({'rankdir':rankdir})
 
   for (var i in base_graph.node) {
     node = base_graph.node[i];
@@ -137,60 +143,30 @@ function dagred3_base_graph(active) {
   }
   return g;
 }
-intervals = [[0.0, 4.125714285714288, "cut"], [4.125714285714288, 7.023696449108615, "1"], [8.320000000000002, 11.080045966382015, "2"], [12.651428571428573, 14.756200484663541, "3"], [15.73714285714286, 18.601745013831568, "4"], [19.611428571428576, 22.33145999836452, "5"], [22.33145999836452, 25.150750820636258, "6"], [27.55428571428572, 29.721899445393763, "7"], [30.37714285714286, 32.40006797221399, "8"], [32.994285714285716, 35.62116334050255, "9"], [36.377142857142864, 38.444232142704514, "10"], [39.92, 41.99027150736831, "11"], [43.17714285714286, 46.39093568842475, "12"], [46.39093568842475, 51.2, "cut"]]
 
-lines = ['bol kih lab aazaad hai;n tere',
- 'bol zabaa;n ab tak terii hai',
- 'teraa sutvaa;n jism hai teraa',
- 'bol kih jaa;n ab tak terii hai',
- 'dekh kih aahangar kii dukaa;n me;n',
- 'tund hai;n shole sur;x hai aahan',
- 'khulne lage quflo;n ke dahaane',
- 'phailaa har ik zanjiir kaa daaman',
- 'bol yih tho;raa vaqt bahut hai',
- 'jism-o-zabaa;n kii maut se pahle',
- 'bol kih sach zindah hai ab tak',
- 'bol jo kuchh kahnaa hai kah le']
-
-scans = {"1": [["=--===--==", [["=", ["b", "c", "v"], 1, [" ", "b", "o"], "l_bcv", 0, 0], ["-", ["c"], 3, ["l"], "s_c", 3, 1], ["-", ["b", "nah"], 5, [" ", "k", "i", "h"], "s_bnah", 4, 3], ["=", ["b", "c", "s", "c"], 4, [" ", "l", "a", "b"], "l_bcsc", 6, 5], ["=", ["b", "v"], 6, [" ", "aa"], "l_bv", 10, 4], ["=", ["c", "v"], 7, ["z", "aa"], "l_cv", 12, 6], ["-", ["c"], 9, ["d"], "s_c", 14, 7], ["-", ["b", "c", "v", "n"], 11, [" ", "h", "ai", ";n"], "s_bcvn<b>", 15, 9], ["=", ["b", "c", "v"], 10, [" ", "t", "e"], "l_bcv", 19, 11], ["=", ["c", "v"], 12, ["r", "e"], "l_cv", 22, 10]], 0]], "2": [["=--======", [["=", ["b", "c", "v"], 1, [" ", "b", "o"], "l_bcv", 0, 0], ["-", ["c"], 3, ["l"], "s_c", 3, 1], ["-", ["b", "c", "s"], 5, [" ", "z", "a"], "s_bcs", 4, 3], ["=", ["c", "v", "n<(aa)wb>"], 4, ["b", "aa", ";n"], "l_cvn<(aa)wb>", 7, 5], ["=", ["b", "s", "c"], 6, [" ", "a", "b"], "l_bsc", 10, 4], ["=", ["b", "c", "s", "c"], 7, [" ", "t", "a", "k"], "l_bcsc", 13, 6], ["=", ["b", "c", "v"], 8, [" ", "t", "e"], "l_bcv", 17, 7], ["=", ["c", "v"], 10, ["r", "ii"], "l_cv", 20, 8], ["=", ["b", "c", "v"], 12, [" ", "h", "ai"], "l_bcv", 22, 10]], 0]], "3": [["=====--==", [["=", ["b", "c", "v"], 1, [" ", "t", "e"], "l_bcv", 0, 0], ["=", ["c", "v"], 2, ["r", "aa"], "l_cv", 3, 1], ["=", ["b", "c", "s", "c"], 4, [" ", "s", "u", "t"], "l_bcsc", 5, 2], ["=", ["c", "v", "n<(aa)wb>"], 6, ["v", "aa", ";n"], "l_cvn<(aa)wb>", 9, 4], ["=", ["b", "c", "s", "c"], 7, [" ", "j", "i", "s"], "l_bcsc", 12, 6], ["-", ["c"], 9, ["m"], "s_c", 16, 7], ["-", ["b", "c", "v"], 11, [" ", "h", "ai"], "s_bcv<b>", 17, 9], ["=", ["b", "c", "v"], 10, [" ", "t", "e"], "l_bcv", 20, 11], ["=", ["c", "v"], 12, ["r", "aa"], "l_cv", 23, 10]], 0]], "4": [["=--======", [["=", ["b", "c", "v"], 1, [" ", "b", "o"], "l_bcv", 0, 0], ["-", ["c"], 3, ["l"], "s_c", 3, 1], ["-", ["b", "nah"], 5, [" ", "k", "i", "h"], "s_bnah", 4, 3], ["=", ["b", "c", "v", "n<(aa)wb>"], 4, [" ", "j", "aa", ";n"], "l_cvn<(aa)wb>", 6, 5], ["=", ["b", "s", "c"], 6, [" ", "a", "b"], "l_bsc", 10, 4], ["=", ["b", "c", "s", "c"], 7, [" ", "t", "a", "k"], "l_bcsc", 13, 6], ["=", ["b", "c", "v"], 8, [" ", "t", "e"], "l_bcv", 17, 7], ["=", ["c", "v"], 10, ["r", "ii"], "l_cv", 20, 8], ["=", ["b", "c", "v"], 12, [" ", "h", "ai"], "l_bcv", 22, 10]], 0]], "5": [["=--===--==", [["=", ["b", "c", "v"], 1, [" ", "d", "e"], "l_bcv", 0, 0], ["-", ["c"], 3, ["kh"], "s_c", 3, 1], ["-", ["b", "nah"], 5, [" ", "k", "i", "h"], "s_bnah", 4, 3], ["=", ["b", "v"], 4, [" ", "aa"], "l_bv", 6, 5], ["=", ["c", "s", "c"], 6, ["h", "a", "n"], "l_csc", 8, 4], ["=", ["c", "s", "c"], 7, ["g", "a", "r"], "l_csc", 11, 6], ["-", ["b", "c", "v"], 9, [" ", "k", "ii"], "s_bcv<b>", 14, 7], ["-", ["b", "c", "s"], 11, [" ", "d", "u"], "s_bcs", 17, 9], ["=", ["c", "v", "n<(aa)wb>"], 10, ["k", "aa", ";n"], "l_cvn<(aa)wb>", 20, 11], ["=", ["b", "c", "v", "n"], 12, [" ", "m", "e", ";n"], "l_bcvn", 23, 10]], 0]], "6": [["=--===--==", [["=", ["b", "c", "s", "c"], 1, [" ", "t", "u", "n"], "l_bcsc", 0, 0], ["-", ["c"], 3, ["d"], "s_c", 4, 1], ["-", ["b", "c", "v", "n"], 5, [" ", "h", "ai", ";n"], "s_bcvn<b>", 5, 3], ["=", ["b", "c", "v"], 4, [" ", "sh", "o"], "l_bcv", 9, 5], ["=", ["c", "v"], 6, ["l", "e"], "l_cv", 12, 4], ["=", ["b", "c", "s", "c"], 7, [" ", "s", "u", "r"], "l_bcsc", 14, 6], ["-", ["c"], 9, [";x"], "s_c", 18, 7], ["-", ["b", "c", "v"], 11, [" ", "h", "ai"], "s_bcv<b>", 19, 9], ["=", ["b", "v"], 10, [" ", "aa"], "l_bv", 22, 11], ["=", ["c", "s", "c"], 12, ["h", "a", "n"], "l_csc", 24, 10]], 0]], "7": [["=--===--==", [["=", ["b", "c", "s", "c"], 1, [" ", "kh", "u", "l"], "l_bcsc", 0, 0], ["-", ["c", "v"], 3, ["n", "e"], "s_cv<b>", 4, 1], ["-", ["b", "c", "s"], 5, [" ", "l", "a"], "s_bcs", 6, 3], ["=", ["c", "v"], 4, ["g", "e"], "l_cv", 9, 5], ["=", ["b", "c", "s", "c"], 6, [" ", "q", "u", "f"], "l_bcsc", 11, 4], ["=", ["c", "v", "n"], 7, ["l", "o", ";n"], "l_cvn", 15, 6], ["-", ["b", "c", "v"], 9, [" ", "k", "e"], "s_bcv<b>", 18, 7], ["-", ["b", "c", "s"], 11, [" ", "d", "a"], "s_bcs", 21, 9], ["=", ["c", "v"], 10, ["h", "aa"], "l_cv", 24, 11], ["=", ["c", "v"], 12, ["n", "e"], "l_cv", 26, 10]], 0]], "8": [["=--===--==", [["=", ["b", "c", "v"], 1, [" ", "ph", "ai"], "l_bcv", 0, 0], ["-", ["c", "v"], 3, ["l", "aa"], "s_cv<b>", 3, 1], ["-", ["b", "c", "s"], 5, [" ", "h", "a"], "s_bcs", 5, 3], ["=", ["c", "b", "s", "c"], 4, ["r", " ", "i", "k"], "l_cbsc", 8, 5], ["=", ["b", "c", "s", "c"], 6, [" ", "z", "a", "n"], "l_bcsc", 12, 4], ["=", ["c", "v"], 7, ["j", "ii"], "l_cv", 16, 6], ["-", ["c"], 9, ["r"], "s_c", 18, 7], ["-", ["b", "c", "v"], 11, [" ", "k", "aa"], "s_bcv<b>", 19, 9], ["=", ["b", "c", "v"], 10, [" ", "d", "aa"], "l_bcv", 22, 11], ["=", ["c", "s", "c"], 12, ["m", "a", "n"], "l_csc", 25, 10]], 0]], "9": [["=--===--==", [["=", ["b", "c", "v"], 1, [" ", "b", "o"], "l_bcv", 0, 0], ["-", ["c"], 3, ["l"], "s_c", 3, 1], ["-", ["b", "c", "s", "c<h+wb>"], 5, [" ", "y", "a", "h"], "s_bcsc<h+wb>", 4, 3], ["=", ["b", "c", "v"], 4, [" ", "th", "o"], "l_bcv", 8, 5], ["=", ["c", "v"], 6, [";r", "aa"], "l_cv", 11, 4], ["=", ["b", "c", "s", "c"], 7, [" ", "v", "a", "q"], "l_bcsc", 13, 6], ["-", ["c"], 9, ["t"], "s_c", 17, 7], ["-", ["b", "c", "s"], 11, [" ", "b", "a"], "s_bcs", 18, 9], ["=", ["c", "s", "c"], 10, ["h", "u", "t"], "l_csc", 21, 11], ["=", ["b", "c", "v"], 12, [" ", "h", "ai"], "l_bcv", 24, 10]], 0]], "10": [["=--===--==", [["=", ["b", "c", "s", "c"], 1, [" ", "j", "i", "s"], "l_bcsc", 0, 0], ["-", ["c", "o"], 3, ["m", "-o-"], "s_co", 4, 1], ["-", ["c", "s"], 5, ["z", "a"], "s_cs", 6, 3], ["=", ["c", "v", "n<(aa)wb>"], 4, ["b", "aa", ";n"], "l_cvn<(aa)wb>", 8, 5], ["=", ["b", "c", "v"], 6, [" ", "k", "ii"], "l_bcv", 11, 4], ["=", ["b", "c", "v"], 7, [" ", "m", "au"], "l_bcv", 14, 6], ["-", ["c"], 9, ["t"], "s_c", 17, 7], ["-", ["b", "c", "v"], 11, [" ", "s", "e"], "s_bcv<b>", 18, 9], ["=", ["b", "c", "s", "c"], 10, [" ", "p", "a", "h"], "l_bcsc", 21, 11], ["=", ["c", "v"], 12, ["l", "e"], "l_cv", 25, 10]], 0]], "11": [["=--======", [["=", ["b", "c", "v"], 1, [" ", "b", "o"], "l_bcv", 0, 0], ["-", ["c"], 3, ["l"], "s_c", 3, 1], ["-", ["b", "nah"], 5, [" ", "k", "i", "h"], "s_bnah", 4, 3], ["=", ["b", "c", "s", "c"], 4, [" ", "s", "a", "ch"], "l_bcsc", 6, 5], ["=", ["b", "c", "s", "c"], 6, [" ", "z", "i", "n"], "l_bcsc", 10, 4], ["=", ["c", "s", "c<h+wb>"], 7, ["d", "a", "h"], "l_csc<h+wb>", 14, 6], ["=", ["b", "c", "v"], 8, [" ", "h", "ai"], "l_bcv", 17, 7], ["=", ["b", "s", "c"], 10, [" ", "a", "b"], "l_bsc", 20, 8], ["=", ["b", "c", "s", "c"], 12, [" ", "t", "a", "k"], "l_bcsc", 23, 10]], 0]], "12": [["=--======", [["=", ["b", "c", "v"], 1, [" ", "b", "o"], "l_bcv", 0, 0], ["-", ["c"], 3, ["l"], "s_c", 3, 1], ["-", ["b", "c", "v"], 5, [" ", "j", "o"], "s_bcv<b>", 4, 3], ["=", ["b", "c", "s", "c"], 4, [" ", "k", "u", "chh"], "l_bcsc", 7, 5], ["=", ["b", "c", "s", "c"], 6, [" ", "k", "a", "h"], "l_bcsc", 11, 4], ["=", ["c", "v"], 7, ["n", "aa"], "l_cv", 15, 6], ["=", ["b", "c", "v"], 8, [" ", "h", "ai"], "l_bcv", 17, 7], ["=", ["b", "c", "s", "c<h+wb>"], 10, [" ", "k", "a", "h"], "l_bcsc<h+wb>", 20, 8], ["=", ["b", "c", "v"], 12, [" ", "l", "e"], "l_bcv", 24, 10]], 0]]}
-
+var language = 'en';
+function curr_language(){
+  return language;//return $('#language-group > .btn.active input')[0].id;
+}
+var intervals = [[0.0, 4.125714285714288, "cut"], [4.125714285714288, 7.023696449108615, "1"], [8.320000000000002, 11.080045966382015, "2"], [12.651428571428573, 14.756200484663541, "3"], [15.73714285714286, 18.601745013831568, "4"], [19.611428571428576, 22.33145999836452, "5"], [22.33145999836452, 25.150750820636258, "6"], [27.55428571428572, 29.721899445393763, "7"], [30.37714285714286, 32.40006797221399, "8"], [32.994285714285716, 35.62116334050255, "9"], [36.377142857142864, 38.444232142704514, "10"], [39.92, 41.99027150736831, "11"], [43.17714285714286, 46.39093568842475, "12"], [46.39093568842475, 51.2, "cut"]]
 var node_names = {"=": "Long", "-": "Short", "_": "Uncounted Short",
                   "start": "Start", "end": "End"}
 
-/*
-      orig_tokens = node.orig_tokens
-      if (node_type == "start" || node_type == "end") {
-        name = node_name;
-      } else {
-        name = node_name + " " + " (<em>"+node.orig_tokens.join("").replace(" ", interpunct)+"</em>)"
-      }
-      description = htmlEntities(node.rule_found);
-      description = verbose(v, node.rule_found, node.orig_tokens);
-      //this.title = "BOSS";//"<p class='name'>" + name + "</p><p class='description'>" + description + "</p>";
-      //this.title = title;//"TITLE";
-      $(this).qtip({
-        content: {
-          text: description,
-          title: name},
-
-        position: {
-          my: 'top left',  // Position my top left...
-          at: 'bottom left'
-        },
-        // style: {
-        //   classes: 'qtip-blue qtip-shadow'
-        // }
-      })
-  });
-}*/
-function dagred3_of_scan_result(scan_result){
-  [scan, matches, meter_key] = scan_result[0]; // an array?
+lines = settings.lines;
+scans = settings.scans;
+labels_of = settings.labels_of;
+function dagred3_of_scan_result(line_id){
+  scan_result = scans[line_id];
+  labels = labels_of[line_id];
+  [scan, matches, meter_key] = scan_result; // an array?
   g = dagred3_base_graph(true);
   for (var match_id in matches ) {
-    match = matches[match_id];
+    var match = matches[match_id];
     [type, matched_tokens, node_key, orig_tokens, rule_found, token_i, parent_key] = match
     interpunct = "·"
-    _label = orig_tokens.join('').replace(/ /g, interpunct);
+    /*_label = orig_tokens.join('').replace(/ /g, interpunct);*/
+    _lang = curr_language();
+    _label = labels[_lang][match_id];
     console.log(match);
     node_shapes = {"=": "rectangle", "-": "circle", "_": "circle"};
     node_name = node_names[type];
@@ -216,7 +192,7 @@ function dagred3_of_scan_result(scan_result){
 
 g_scans = {'cut': dagred3_base_graph()}
 for (var line_id in scans){
-  g_scans[line_id] = dagred3_of_scan_result(scans[line_id]);
+  g_scans[line_id] = dagred3_of_scan_result(line_id);
 }
 
 //
@@ -546,11 +522,13 @@ function getSection(time) {
   return "cut";
 }
 
-var onProgress = function(time) {
+var onProgress = function(time, force) {
   var x = time;
   section = getSection(x);
-  if (section != currSection) {
+  if (section != currSection || force==true) {
     g = g_scans[section];
+    $("#poem_text").text(settings.lines_en[section])//lines[section]['ur'])
+
     render(inner, g);//_scans[section]);
 
     svg.attr('width', g.graph().width);
@@ -571,6 +549,22 @@ var onSeek = function(x) {
   onProgress(time);
   /*alert('hi');*/
 }
+
+
+$("#language-group :input").change(function() {
+    console.log(this); // points to the clicked input button
+    //alert('hi');
+    language = this.id;
+    var time = window.wavesurfer.getCurrentTime();
+    g_scans = {'cut': dagred3_base_graph()}
+    for (var line_id in scans){
+      g_scans[line_id] = dagred3_of_scan_result(line_id);
+    }
+
+
+
+    onProgress(time, true);
+});
 
 wavesurfer.on('audioprocess', onProgress);
 wavesurfer.on('seek', onSeek);
