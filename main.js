@@ -1,16 +1,125 @@
 // Create a new directed graph
 
-var base_graph = {'edge': {'0': {'1': {}}, '1': {'2': {}, '3': {}}, '2': {'4': {}}, '3': {'5': {}}, '4': {'6': {}}, '5': {'4': {}}, '6': {'7': {}}, '7': {'8': {}, '9': {}}, '8': {'10': {}}, '9': {'11': {}}, '10': {'12': {}}, '11': {'10': {}}, '12': {'13': {}}}, 'node': {'0': {'type': '0'}, '1': {'type': '='}, '2': {'type': '='}, '3': {'type': '-'}, '4': {'type': '='}, '5': {'type': '-'}, '6': {'type': '='}, '7': {'type': '='}, '8': {'type': '='}, '9': {'type': '-'}, '10': {'type': '='}, '11': {'type': '-'}, '12': {'type': '='}, '13': {'type': 'Accepting', 'id': 0, 'name': 'Faiz', 'regex_pattern': '=(=|--)===(=|--)==', 'meter_key': 0}}, 'edge_list': [[0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [4, 6], [5, 4], [6, 7], [7, 8], [7, 9], [8, 10], [9, 11], [10, 12], [11, 10], [12, 13]]};
+var base_graph = {
+  'edge': {
+    '0': {
+      '1': {}
+    },
+    '1': {
+      '2': {},
+      '3': {}
+    },
+    '2': {
+      '4': {}
+    },
+    '3': {
+      '5': {}
+    },
+    '4': {
+      '6': {}
+    },
+    '5': {
+      '4': {}
+    },
+    '6': {
+      '7': {}
+    },
+    '7': {
+      '8': {},
+      '9': {}
+    },
+    '8': {
+      '10': {}
+    },
+    '9': {
+      '11': {}
+    },
+    '10': {
+      '12': {}
+    },
+    '11': {
+      '10': {}
+    },
+    '12': {
+      '13': {}
+    }
+  },
+  'node': {
+    '0': {
+      'type': '0'
+    },
+    '1': {
+      'type': '='
+    },
+    '2': {
+      'type': '='
+    },
+    '3': {
+      'type': '-'
+    },
+    '4': {
+      'type': '='
+    },
+    '5': {
+      'type': '-'
+    },
+    '6': {
+      'type': '='
+    },
+    '7': {
+      'type': '='
+    },
+    '8': {
+      'type': '='
+    },
+    '9': {
+      'type': '-'
+    },
+    '10': {
+      'type': '='
+    },
+    '11': {
+      'type': '-'
+    },
+    '12': {
+      'type': '='
+    },
+    '13': {
+      'type': 'Accepting',
+      'id': 0,
+      'name': 'Faiz',
+      'regex_pattern': '=(=|--)===(=|--)==',
+      'meter_key': 0
+    }
+  },
+  'edge_list': [
+    [0, 1],
+    [1, 2],
+    [1, 3],
+    [2, 4],
+    [3, 5],
+    [4, 6],
+    [5, 4],
+    [6, 7],
+    [7, 8],
+    [7, 9],
+    [8, 10],
+    [9, 11],
+    [10, 12],
+    [11, 10],
+    [12, 13]
+  ]
+}
 
-function dagred3_base_graph(active) {
-  if (language=='ur') {
+function dagred3_base_graph (active) {
+  if (language === 'ur') {
     rankdir = 'rl'
   } else {rankdir='lr'}
   var g = new dagreD3.graphlib.Graph({compound:false}).setGraph({'rankdir':rankdir})
   node_names = node_names_by_lang[language];
   for (var i in base_graph.node) {
     node = base_graph.node[i];
-    if (node.type === "0") {
+    if (node.type === '0') {
       if (active) {
         _style = 'fill: green;'
       } else {
@@ -44,21 +153,42 @@ function dagred3_base_graph(active) {
 }
 
 var language = 'en';
-function curr_language(){
-  return language;//return $('#language-group > .btn.active input')[0].id;
+function curr_language() {
+  return language;
 }
+
 var intervals = [[0.0, 4.125714285714288, "cut"], [4.125714285714288, 7.023696449108615, "1"], [8.320000000000002, 11.080045966382015, "2"], [12.651428571428573, 14.756200484663541, "3"], [15.73714285714286, 18.601745013831568, "4"], [19.611428571428576, 22.33145999836452, "5"], [22.33145999836452, 25.150750820636258, "6"], [27.55428571428572, 29.721899445393763, "7"], [30.37714285714286, 32.40006797221399, "8"], [32.994285714285716, 35.62116334050255, "9"], [36.377142857142864, 38.444232142704514, "10"], [39.92, 41.99027150736831, "11"], [43.17714285714286, 46.39093568842475, "12"], [46.39093568842475, 51.2, "cut"]]
 
-var node_names_by_lang =
-{'en': {"=": "Long", "-": "Short", "_": "Uncounted Short",
-                  "start": "Start", "end": "End"},
-  'hi':{"=": "लम्बा", "-": "छोटा", "_": "Uncounted Short",
-                                    "start": "शुरू", "end": "आख़िर"},
-                                    'ur':{"=": "لمبا", "-": "چھوٹا", "_": "Uncounted Short",
-                                                      "start": "شروع", "end": "آخر"}
+var node_names_by_lang = {
+  'en': {
+    "=": "Long",
+    "-": "Short",
+    "_": "Uncounted Short",
+    "start": "Start",
+    "end": "End"
+  },
+  'hi': {
+    "=": "लम्बा",
+    "-": "छोटा",
+    "_": "Uncounted Short",
+    "start": "शुरू",
+    "end": "आख़िर"
+  },
+  'ur': {
+    "=": "لمبا",
+    "-": "چھوٹا",
+    "_": "Uncounted Short",
+    "start": "شروع",
+    "end": "آخر"
+  }
 }
-var node_names = {"=": "Long", "-": "Short", "_": "Uncounted Short",
-                  "start": "Start", "end": "End"}
+var node_names = {
+  "=": "Long",
+  "-": "Short",
+  "_": "Uncounted Short",
+  "start": "Start",
+  "end": "End"
+}
 
 lines = settings.lines;
 scans = settings.scans;
@@ -73,7 +203,7 @@ function dagred3_of_scan_result(line_id){
     [type, matched_tokens, node_key, orig_tokens, rule_found, token_i, parent_key] = match
     interpunct = "·"
     /*_label = orig_tokens.join('').replace(/ /g, interpunct);*/
-    _lang = curr_language();
+    _lang = curr_language()
     _label = labels[_lang][match_id];
     node_shapes = {"=": "rectangle", "-": "circle", "_": "circle"};
     node_names = node_names_by_lang[language];
@@ -99,14 +229,15 @@ function dagred3_of_scan_result(line_id){
   return g;
 }
 
-g_scans = {'cut': dagred3_base_graph()}
-for (var line_id in scans){
-  g_scans[line_id] = dagred3_of_scan_result(line_id);
+var g_scans = { 'cut': dagred3_base_graph() }
+
+for (var line_id in scans) {
+  g_scans[line_id] = dagred3_of_scan_result(line_id)
 }
 
 
-var svg = d3.select("svg");
-var inner = svg.select("g");
+var svg = d3.select("svg")
+var inner = svg.select("g")
 /*
 // Set up zoom support
 var zoom = d3.zoom().on("zoom", function() {
@@ -119,18 +250,18 @@ var render = new_renderer()/* dagreD3.render();*/
 
 
 // Run the renderer. This is what draws the initial graph.
-g = g_scans['cut'];
+g = g_scans['cut']
 
 render(inner, g);//_scans['cut']);/*_scans['cut']);*/
-svg.attr('width', g.graph().width);
-svg.attr('height', g.graph().height);
+svg.attr('width', g.graph().width)
+svg.attr('height', g.graph().height)
 /* */
 
 
 
 var styleTooltip = function(name, description) {
-  return "<p class='name'>" + name + "</p><p class='description'>" + description + "</p>";
-};
+  return "<p class='name'>" + name + "</p><p class='description'>" + description + "</p>"
+}
 
 function htmlEntities(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -140,6 +271,9 @@ function em(s){
 }
 explication = {"l_bcsc": "At the start of a word, a consonant {1} followed by a short vowel {2} and another consonant {3} is long. If the second consonant {3} was followed by a vowel, a long unit would not be possible here.", "l_bcsc<h+wb>": "A consonant {1} followed by a short vowel {2} and a pronounced {3} is long.", "l_bcv": "A consonant {1} followed by a long vowel {2} can always be long. At the end of a word, this combination could be short.", "l_bcvn": "A consonant {1} followed by a nasalized long vowel {2}{3} can always be long. At the end of a word, this combination could be short.", "l_bsc": "At the start of a word, a short vowel {0} followed by a consonant {1} is long.", "l_bv": "A long vowel {1} at the start of a word is long. It could also join with the consonant of a preceding word to form a long or short unit.", "l_cbsc": "A consonant {0} at the end of a word joins with a short vowel {2} and a consonant {3} at the start of a next word to form a long unit.", "l_csc": "A consonant {0} followed by short vowel {1} and another consonant {2} is long.", "l_csc<h+wb>": "A consonant {0} followed by a short vowel {1} and a pronounced consonant {2} is long.", "l_cv": "A consonant {0} followed by a long vowel {1} can always be long. At the end of a word, it could be short.", "l_cvn": "A consonant {0} followed by a nasalized long vowel {1}{2} here is long. At the end of a word, it could be short.", "l_cvn<(aa)wb>": "A consonant {0} followed by a nasalized long vowel {1}{2} at the end of a word can be long. The nasalization could have happened for the meter.", "s_bcs": "At the start of a word, a short vowel {0} followed by a consonant {1} is short. If this were followed by a consonant at the end of a word or a cluster a cluster of consonants, this short unit would not be possible.", "s_bcsc<h+wb>": "Here a consonant {1} followed by short vowel {2} and an unpronounced {3} is short.", "s_bcv<b>": "A consonant {1} followed by a long vowel {2} at the end of a word is shortened. This combination could also be long.", "s_bcvn<b>": "A consonant {1} followed by a nasalized long vowel {2} at the end of a word is shortened. This combination could also be long.", "s_bnah": "A consonant {0} followed by a short vowel {1} and an unpronounced {2} is short.", "s_c": "The consonant {0} is short, as it is not followed by vowel or preceded by a short vowel.", "s_co": "The consonant {0} followed by the conjunction {1} here is short. This combination could also be long.", "s_cs": "The consonant {0} followed by the short vowel {1} is short.  If this were followed by a consonant at the end of a word or a cluster of consonants, this short unit would not be possible.", "s_cv<b>": "At the end of a word, a consonant {0} followed by a long vowel {1} is shortened. This combination could also be long."};
 
+function token_trans(token){
+  return settings.token_trans[token][curr_language()]
+}
 function verbose(node_id, rule_found, ot){
   function em(x){
     if (typeof(x) != "object") { /* change to check i farray?*/
@@ -148,7 +282,7 @@ function verbose(node_id, rule_found, ot){
     out = "(<strong>";
 
     for (i=0;i<x.length;i++) {
-      out += ot[x[i]];
+      out += settings.token_trans[ot[x[i]]][curr_language()]
     }
     out += "</strong>)";
     return out;
@@ -161,7 +295,7 @@ function verbose(node_id, rule_found, ot){
   }
 
   for (i=0;i<ot.length;i++) {
-    text = text.replace(new RegExp("\\{"+i+"\\}", 'g'), "<strong>"+ot[i]+"</strong>");
+    text = text.replace(new RegExp("\\{"+i+"\\}", 'g'), "<strong>"+token_trans(ot[i])+"</strong>");
   }
   text = text.replace(new RegExp("</strong><strong>", 'g'), "");
   return text;
@@ -246,10 +380,14 @@ function getSection(time) {
 
 var onProgress = function(time, force) {
   var x = time
-  section = getSection(x)
-  if (section != currSection || force==true) {
-    g = g_scans[section]
-    $("#poem_text").text(settings.lines_en[section])
+  var section = getSection(x)
+  if (section !== currSection || force === true) {
+    var g = g_scans[section]
+    $('#poem_text').html(
+      settings.lines['ur'][section] + '<br/>' +
+      settings.lines['hi'][section] + '<br/>' +
+      settings.lines['en'][section] + '<br/>'
+    )
 
     render = new_renderer()
     d3.select("svg > g").selectAll("*").remove();
