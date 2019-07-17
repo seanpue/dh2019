@@ -63,8 +63,7 @@
 
 <script src="js/wavesurfer.js"></script>
 <script src="js/wavesurfer.cursor.js"></script>
-<svg width=960 height=600><g/></svg>
-<div id="waveform"></div>
+
 
 <div class="form-group" id="language">
     <button class="btn btn-primary" onclick="wavesurfer.playPause()">
@@ -82,16 +81,26 @@
   </label>
 </div>
 </div>
+<section>
+<p>An example that shows a graph-based scan of an Urdu-Hindi poem ("Bol" by Faiz Ahmed Faiz)  with hover events explaining the meter. Rectangles are long metrical units, circles are short ones.
+</section>
 
     <!--<button class="btn btn-primary" onclick="wavesurfer.toggleMute()">
       <i class="fa fa-volume-off"></i>
       Toggle Mute
     </button>-->
 
-<div id="poem_text"></div>
-<section>
-<p>An example that shows a graph-based scan of an Urdu-Hindi poem ("Bol" by Faiz Ahmed Faiz)  with hover events explaining the meter. Rectangles are long metrical units, circles are short ones.
-</section>
+<div id="poem_line_text">
+  <table class="table">
+    <tr>
+      <td class="align-right text_ur" id="poem_line_ur" />
+      <td class="align-left text_hi" id="poem_line_hi" />
+      <td class="align-left text_en" id="poem_line_en" />
+  </table>
+</div>
+<div id="waveform"></div>
+
+<svg width=960 height=600><g/></svg>
 
 <script src="settings.js"></script>
 <script src="dagre-supplemental.js"></script>
