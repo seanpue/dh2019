@@ -293,10 +293,39 @@ function getSection (time) {
   return 'cut'
 }
 
+function generateFullPoem() {
+  var output = '<table class="table">'
+  $(settings.intervals).each(function (index) {
+    // start = this[0]
+    // end = this[1]
+    var label = this[2] /* line number */
+    if (label !== 'cut' && label !== undefined) {
+      var section = label
+      var textEN = settings.lines['en'][section]
+      var textHI = settings.lines['hi'][section]
+      var textUR = settings.lines['ur'][section]
+
+      output += '  <tr id="line_' + index + '">'
+      /* output += '<td>' + label + '</td>' */
+      output += '<td class="align-right ur">' + textUR + '</td>'
+      output += '<td class="hi">' + textHI + '</td>'
+      output += '<td class="en">' + textEN + '</td>'
+      output += '</tr>'
+    }
+  })
+  output += '</table>'
+  $('#poem_full_text').html(output)
+
+}
+
 var onProgress = function (time, force) {
   var x = time
   var section = getSection(x)
   if (section !== currSection || force === true) {
+    if (section) {
+      $('#poem_full_text tr').removeClass('table-active')
+      $('#line_' + section).toggleClass('table-active')
+    }
     var g = g_scans[section]
     var textEN = '<br/>'
     var textHI = '<br/>'
@@ -341,6 +370,7 @@ $('#language-group :input').change(function () {
   }
   onProgress(time, true)
 })
+generateFullPoem()
 
 wavesurfer.on('audioprocess', onProgress)
 wavesurfer.on('seek', onSeek)
