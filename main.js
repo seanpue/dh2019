@@ -274,8 +274,8 @@ svg.attr('height', g.graph().height)// * initialScale + 40);
 
 var wavesurfer = WaveSurfer.create({
   container: '#waveform',
-  waveColor: '0DB14B',
-  progressColor: '18453B',
+  waveColor: '#0DB14B',
+  progressColor: '#18453B',
   scrollParent: true
   // rtl: true
 })
