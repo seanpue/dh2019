@@ -63,6 +63,8 @@
 
 <script src="js/wavesurfer.js"></script>
 <script src="js/wavesurfer.cursor.js"></script>
+<script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js"></script>
+
 
 
 <div class="form-group" id="language">
@@ -98,8 +100,14 @@
       <td class="align-left text_en" id="poem_line_en" />
   </table>
 </div>
-<div id="waveform"></div>
+<div id="waveform">
+                    <div class="progress progress-striped active" id="progress-bar">
+                        <div class="progress-bar progress-bar-info"></div>
+                    </div>
 
+                    <!-- Here be waveform -->
+                </div>
+                <div id="wave-spectrogram"></div>
 <svg width=960 height=600><g/></svg>
 <div id="poem_full_text" />
 <script src="settings.js"></script>

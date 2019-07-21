@@ -1,5 +1,5 @@
 // Create a new directed graph
-/* global settings, dagreD3, $ */
+/* global settings, dagreD3, $, WaveSurfer, new_renderer */
 
 function dagreD3BaseGraph (active) {
   var rankdir
@@ -173,17 +173,20 @@ svg.attr('width', g.graph().width)
 svg.attr('height', g.graph().height)
 /* */
 
-var styleTooltip = function (name, description) {
+/* var styleTooltip = function (name, description) {
   return "<p class='name'>" + name + "</p><p class='description'>" + description + '</p>'
-}
+} */
 
-function htmlEntities (str) {
+/* function htmlEntities (str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
-function em (s) {
+*/
+
+/* function em (s) {
   return ' (<strong>' + s + '</strong) '
-}
-explication = {'l_bcsc': 'At the start of a word, a consonant {1} followed by a short vowel {2} and another consonant {3} is long. If the second consonant {3} was followed by a vowel, a long unit would not be possible here.', 'l_bcsc<h+wb>': 'A consonant {1} followed by a short vowel {2} and a pronounced {3} is long.', 'l_bcv': 'A consonant {1} followed by a long vowel {2} can always be long. At the end of a word, this combination could be short.', 'l_bcvn': 'A consonant {1} followed by a nasalized long vowel {2}{3} can always be long. At the end of a word, this combination could be short.', 'l_bsc': 'At the start of a word, a short vowel {0} followed by a consonant {1} is long.', 'l_bv': 'A long vowel {1} at the start of a word is long. It could also join with the consonant of a preceding word to form a long or short unit.', 'l_cbsc': 'A consonant {0} at the end of a word joins with a short vowel {2} and a consonant {3} at the start of a next word to form a long unit.', 'l_csc': 'A consonant {0} followed by short vowel {1} and another consonant {2} is long.', 'l_csc<h+wb>': 'A consonant {0} followed by a short vowel {1} and a pronounced consonant {2} is long.', 'l_cv': 'A consonant {0} followed by a long vowel {1} can always be long. At the end of a word, it could be short.', 'l_cvn': 'A consonant {0} followed by a nasalized long vowel {1}{2} here is long. At the end of a word, it could be short.', 'l_cvn<(aa)wb>': 'A consonant {0} followed by a nasalized long vowel {1}{2} at the end of a word can be long. The nasalization could have happened for the meter.', 's_bcs': 'At the start of a word, a short vowel {0} followed by a consonant {1} is short. If this were followed by a consonant at the end of a word or a cluster a cluster of consonants, this short unit would not be possible.', 's_bcsc<h+wb>': 'Here a consonant {1} followed by short vowel {2} and an unpronounced {3} is short.', 's_bcv<b>': 'A consonant {1} followed by a long vowel {2} at the end of a word is shortened. This combination could also be long.', 's_bcvn<b>': 'A consonant {1} followed by a nasalized long vowel {2} at the end of a word is shortened. This combination could also be long.', 's_bnah': 'A consonant {0} followed by a short vowel {1} and an unpronounced {2} is short.', 's_c': 'The consonant {0} is short, as it is not followed by vowel or preceded by a short vowel.', 's_co': 'The consonant {0} followed by the conjunction {1} here is short. This combination could also be long.', 's_cs': 'The consonant {0} followed by the short vowel {1} is short.  If this were followed by a consonant at the end of a word or a cluster of consonants, this short unit would not be possible.', 's_cv<b>': 'At the end of a word, a consonant {0} followed by a long vowel {1} is shortened. This combination could also be long.'}
+} */
+
+var explication = {'l_bcsc': 'At the start of a word, a consonant {1} followed by a short vowel {2} and another consonant {3} is long. If the second consonant {3} was followed by a vowel, a long unit would not be possible here.', 'l_bcsc<h+wb>': 'A consonant {1} followed by a short vowel {2} and a pronounced {3} is long.', 'l_bcv': 'A consonant {1} followed by a long vowel {2} can always be long. At the end of a word, this combination could be short.', 'l_bcvn': 'A consonant {1} followed by a nasalized long vowel {2}{3} can always be long. At the end of a word, this combination could be short.', 'l_bsc': 'At the start of a word, a short vowel {0} followed by a consonant {1} is long.', 'l_bv': 'A long vowel {1} at the start of a word is long. It could also join with the consonant of a preceding word to form a long or short unit.', 'l_cbsc': 'A consonant {0} at the end of a word joins with a short vowel {2} and a consonant {3} at the start of a next word to form a long unit.', 'l_csc': 'A consonant {0} followed by short vowel {1} and another consonant {2} is long.', 'l_csc<h+wb>': 'A consonant {0} followed by a short vowel {1} and a pronounced consonant {2} is long.', 'l_cv': 'A consonant {0} followed by a long vowel {1} can always be long. At the end of a word, it could be short.', 'l_cvn': 'A consonant {0} followed by a nasalized long vowel {1}{2} here is long. At the end of a word, it could be short.', 'l_cvn<(aa)wb>': 'A consonant {0} followed by a nasalized long vowel {1}{2} at the end of a word can be long. The nasalization could have happened for the meter.', 's_bcs': 'At the start of a word, a short vowel {0} followed by a consonant {1} is short. If this were followed by a consonant at the end of a word or a cluster a cluster of consonants, this short unit would not be possible.', 's_bcsc<h+wb>': 'Here a consonant {1} followed by short vowel {2} and an unpronounced {3} is short.', 's_bcv<b>': 'A consonant {1} followed by a long vowel {2} at the end of a word is shortened. This combination could also be long.', 's_bcvn<b>': 'A consonant {1} followed by a nasalized long vowel {2} at the end of a word is shortened. This combination could also be long.', 's_bnah': 'A consonant {0} followed by a short vowel {1} and an unpronounced {2} is short.', 's_c': 'The consonant {0} is short, as it is not followed by vowel or preceded by a short vowel.', 's_co': 'The consonant {0} followed by the conjunction {1} here is short. This combination could also be long.', 's_cs': 'The consonant {0} followed by the short vowel {1} is short.  If this were followed by a consonant at the end of a word or a cluster of consonants, this short unit would not be possible.', 's_cv<b>': 'At the end of a word, a consonant {0} followed by a long vowel {1} is shortened. This combination could also be long.'}
 
 function token_trans (token) {
   return settings.token_trans[token][currLanguage()]
@@ -276,11 +279,15 @@ var wavesurfer = WaveSurfer.create({
   container: '#waveform',
   waveColor: '#0DB14B',
   progressColor: '#18453B',
-  scrollParent: true
+  scrollParent: true,
+  plugins: [
+    WaveSurfer.spectrogram.create({
+        container: '#wave-spectrogram'
+    })]
   // rtl: true
 })
 
-var currSection = ''
+var currSection = '' /* current section label, global variable */
 
 function getSection (time) {
   var intervals = settings.intervals
@@ -293,12 +300,35 @@ function getSection (time) {
   return 'cut'
 }
 
-function generateFullPoem() {
-  var output = '<table class="table">'
+function clickRow (event) {
+  var newTime = settings.intervals[event.data.index][0] + .001 // add epsilon
+  window.wavesurfer.setCurrentTime(newTime)
+  onProgress(newTime, true)
+}
+
+function generateFullPoem () {
+  var table = $('<table/>').addClass('table').appendTo('#poem_full_text')
+  $(settings.intervals).each(function (index) {
+    var label = this[2]
+    if (label !== 'cut' && label !== undefined) {
+      var section = label
+      var line = settings.lines[section] || {}
+      var textEN = line.en || ''
+      var textHI = line.hi || ''
+      var textUR = line.ur || ''
+      var row = $('<tr />', { id: 'line_' + label }).appendTo(table).click({ 'index': label }, clickRow)
+      $('<td />').addClass('align-right ur').appendTo(row).text(textUR)
+      $('<td />').addClass('align-left hi').appendTo(row).text(textHI)
+      $('<td />').addClass('align-left en').appendTo(row).text(textEN)
+    }
+  })
+}
+
+/* var output = '<table class="table">'
   $(settings.intervals).each(function (index) {
     // start = this[0]
     // end = this[1]
-    var label = this[2] /* line number */
+    var label = this[2]
     if (label !== 'cut' && label !== undefined) {
       var section = label
       var textEN = settings.lines['en'][section]
@@ -306,7 +336,6 @@ function generateFullPoem() {
       var textUR = settings.lines['ur'][section]
 
       output += '  <tr id="line_' + index + '">'
-      /* output += '<td>' + label + '</td>' */
       output += '<td class="align-right ur">' + textUR + '</td>'
       output += '<td class="hi">' + textHI + '</td>'
       output += '<td class="en">' + textEN + '</td>'
@@ -316,7 +345,18 @@ function generateFullPoem() {
   output += '</table>'
   $('#poem_full_text').html(output)
 
-}
+  function clickRow (event) {
+    window.wavesurfer.setCurrentTime(settings.intervals[event.data.index][0])
+  }
+
+  $(settings.intervals).each(function (index) {
+    // start = this[0]
+    // end = this[1]
+    var label = this[2]
+    if (label !== 'cut' && label !== undefined) {
+      $('#line_' + index).click({ 'index': index }, clickRow)
+    }
+  }) */
 
 var onProgress = function (time, force) {
   var x = time
@@ -331,9 +371,10 @@ var onProgress = function (time, force) {
     var textHI = '<br/>'
     var textUR = '<br/>'
     if (section !== 'cut') { /* could switch to undefined */
-      textEN = settings.lines['en'][section]
-      textHI = settings.lines['hi'][section]
-      textUR = settings.lines['ur'][section]
+      line = settings.lines[section]
+      textEN = line['en']
+      textHI = line['hi']
+      textUR = line['ur']
     }
     $('#poem_line_en').html(textEN)
     $('#poem_line_hi').html(textHI)
@@ -350,10 +391,6 @@ var onProgress = function (time, force) {
     add_qtips()
   }
 }
-    // x = time;
-    // if (x >=10 && x < 25) {
-    //   currGraph =
-    // }
 
 var onSeek = function (x) {
   var time = window.wavesurfer.getCurrentTime()
